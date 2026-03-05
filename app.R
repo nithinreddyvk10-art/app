@@ -1651,29 +1651,7 @@ ui <- dashboardPage(
 )
 # )
 
-ui <- secure_app(ui,
-  enable_admin = T, theme = shinytheme("paper"),
-
-
-  # add image on top ?
-  tags_top =
-    tags$div(
-      # tags$h4("PXPASS", style = "align:center"),
-      tags$img(
-        src = "aguilonlogo.png", width = 100
-      )
-    ),
-
-  # add information on bottom ?
-  tags_bottom = tags$div(
-    tags$p(
-      "Powered by BML "
-    )
-  ),
-  background = "linear-gradient(rgba(0, 0, 0, 0.0),
-                 rgba(28, 40, 51, 0.0)),
-                 url('bg.png')  no-repeat center fixed; background-size: cover; height: 100%; overflow: hidden;"
-)
+# removed secure_app wrapper to bypass authentication
 
 
 
@@ -1704,9 +1682,11 @@ server <- function(input, output, session) {
   pc_pnee_initialized <- reactiveVal(FALSE)
 
   formula_initialized <- reactiveVal(FALSE)
-  res_auth <- secure_server(
-    check_credentials = check_credentials(db_wd)
-  )
+  # Bypass authentication and hardcode 'admin'
+  res_auth <- reactiveValues(user = "admin", admin = "TRUE", group = "admin")
+  # res_auth <- secure_server(
+  #   check_credentials = check_credentials(db_wd)
+  # )
   output$auth_output <- renderText({
     reactiveValuesToList(res_auth)$user
   })
